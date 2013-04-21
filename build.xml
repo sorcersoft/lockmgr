@@ -3,6 +3,7 @@
 	<!-- set global properties -->
 	<import file="../../common-build.xml" />
 	<property name="src" value="./src" />
+	<property name="classes" value="${iGrid.home}/classes" />
 
 	<property name="resources" value="${iGrid.home}/modules/sorcer/resources" />
 	<fileset dir="${resources}" id="icons">
