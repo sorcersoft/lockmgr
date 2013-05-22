@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.sorcersoft.dancres</groupId>
+	<artifactId>locker</artifactId>
+	<version>0.2</version>
+	<name>Lock Manager</name>
+
+	<developers>
+		<developer>
+			<name>Dan Creswell</name>
+			<url>http://www.dancres.org/</url>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Rafał Krupiński</name>
+			<organization>SorcerSoft.com S.A.</organization>
+			<organizationUrl>http://sorcersoft.com/</organizationUrl>
+			<roles>
+				<role>prepare pom.xml</role>
+			</roles>
+			<timezone>+1</timezone>
+		</contributor>
+	</contributors>
+
+	<scm>
+		<developerConnection>scm:git:git@github.com:sorcersoft/locker.git</developerConnection>
+		<connection>scm:git:git://github.com/sorcersoft/locker.git</connection>
+		<url>https://github.com/sorcersoft/locker</url>
+	</scm>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jgroups</groupId>
+			<artifactId>jgroups</artifactId>
+			<version>2.12.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>net.jini</groupId>
+			<artifactId>jsk-lib</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>[1.0.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>[1.2.6</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
