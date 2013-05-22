@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.sorcersoft.dancres</groupId>
+		<artifactId>locker</artifactId>
+		<version>0.2</version>
+	</parent>
+
+	<artifactId>locker-api</artifactId>
+	<name>Lock Manager - API</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.jini</groupId>
+			<artifactId>jsk-platform</artifactId>
+			<version>${v.river}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jgroups</groupId>
+			<artifactId>jgroups</artifactId>
+			<version>${v.jgroups}</version>
+		</dependency>
+	</dependencies>
+</project>
