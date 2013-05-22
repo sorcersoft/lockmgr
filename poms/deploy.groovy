@@ -29,10 +29,7 @@ String rootDir = ".."
     String dir = rootDir+"/"+subDir
     String deployCommand = "mvn deploy:deploy-file "+
                            "-DrepositoryId="+args[0]+" "+
-                           "-Dversion=${version} "+
-                           "-DgeneratePom=false -Dpackaging=jar "+
-                           "-DgroupId=${gId} "+
-                           "-DartifactId=${aId} "+
+                           "-DgeneratePom=false "+
                            "-Dfile=${dir}/${aId}.jar "+
                            "-DpomFile=./${aId}.pom "+
                            "-Durl="+args[1]

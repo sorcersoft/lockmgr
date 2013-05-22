@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.sorcersoft.dancres</groupId>
-	<artifactId>locker</artifactId>
+	<artifactId>lockmgr</artifactId>
 	<version>0.2</version>
 	<name>Lock Manager</name>
 
@@ -56,13 +56,13 @@
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
-			<version>[1.0.3</version>
+			<version>[1.0.3,2.0.0)</version>
 		</dependency>
 
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>[1.2.6</version>
+			<version>[1.2.6,1.3)</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

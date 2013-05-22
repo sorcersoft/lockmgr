@@ -29,7 +29,7 @@ String rootDir = ".."
     String dir = rootDir+"/"+subDir
     String installCommand = "mvn install:install-file "+
                             "-Dversion=${version} "+
-                            "-DgeneratePom=true -Dpackaging=jar "+
+                            "-DgeneratePom=false -Dpackaging=jar "+
                             "-DgroupId=${gId} "+
                             "-DartifactId=${aId} "+
                             "-Dfile=${dir}/${aId}.jar "+

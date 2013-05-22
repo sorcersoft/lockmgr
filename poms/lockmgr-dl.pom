@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.sorcersoft.dancres</groupId>
-	<artifactId>locker-dl</artifactId>
+	<artifactId>lockmgr-dl</artifactId>
 	<version>0.2</version>
 	<name>Lock Manager - codebase</name>
 
