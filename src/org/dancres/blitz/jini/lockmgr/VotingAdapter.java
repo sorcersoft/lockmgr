@@ -20,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.jgroups.*;
 
+import org.jgroups.blocks.RequestOptions;
 import org.jgroups.blocks.VoteException;
 import org.jgroups.blocks.VotingListener;
 import org.jgroups.blocks.MethodCall;
@@ -146,8 +147,8 @@ public class VotingAdapter implements MessageListener, MembershipListener {
                 if(log.isDebugEnabled()) log.debug("Calling remote methods...");
     
             // vote
-            RspList responses = rpcDispatcher.callRemoteMethods(
-									 null, methodCall, mode, timeout);
+            RspList responses = rpcDispatcher.callRemoteMethods(null, methodCall,  
+									 new RequestOptions().setMode(mode).setTimeout(timeout));
                 
 
                 if(log.isDebugEnabled()) log.debug("Checking responses.");

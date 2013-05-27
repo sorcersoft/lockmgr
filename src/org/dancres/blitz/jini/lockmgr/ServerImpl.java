@@ -27,12 +27,9 @@ import net.jini.id.UuidFactory;
 
 import net.jini.export.Exporter;
 
-import net.jini.core.entry.Entry;
-
 import net.jini.core.transaction.Transaction;
 
 import net.jini.core.transaction.server.ServerTransaction;
-import net.jini.core.transaction.server.TransactionManager;
 import net.jini.core.transaction.server.TransactionParticipant;
 
 import net.jini.lookup.JoinManager;
@@ -52,6 +49,8 @@ import org.jgroups.blocks.LockNotReleasedException;
 public class ServerImpl implements Locker {
     public static final String NETWORK_CONFIG_ENTRY_NAME = "networkConfig";
 
+	public static final String IS_STANDALONE = "standalone";
+
     private Proxy theProxy;
 
     private Locker theStub;
@@ -66,6 +65,8 @@ public class ServerImpl implements Locker {
     private VotingAdapter theVotingAdapter;
     private LockManager theLockMgr;
 
+	private boolean standalone = true;
+	
     private long theCrashCount = System.currentTimeMillis();
 
     /**
@@ -90,7 +91,8 @@ public class ServerImpl implements Locker {
             ConfigurationFactory.getEntry(NETWORK_CONFIG_ENTRY_NAME,
                                           JiniConfig.class,
                                           JiniConfig.DEFAULT);
-
+		standalone = ((Boolean) ConfigurationFactory.getEntry(
+				IS_STANDALONE, Boolean.class, Boolean.TRUE)).booleanValue();
         String SERVER_PROTOCOL_STACK = ""
             + "UDP(mcast_addr=" + theConfig.getMcastAddr() +
             ";mcast_port=" + theConfig.getMcastPort() + ";ip_ttl=" +
@@ -141,7 +143,7 @@ public class ServerImpl implements Locker {
         }
 
         System.out.println("Connected: " + theChannel + ", " +
-                           theChannel.getLocalAddress());
+                           theChannel.getAddress());
 
         theLockMgr = new DistributedLockManager(theVotingAdapter, myUuid);
 
@@ -284,6 +286,37 @@ public class ServerImpl implements Locker {
         }        
     }
 
+	public void destroy() throws java.rmi.RemoteException {
+		theJoinManager.terminate();
+		theExporter.unexport(true);
+		new Thread(new DestroyThread()).start();
+	}
+
     public void ping() throws RemoteException {
+	}
+
+	public Object getAdmin() throws java.rmi.RemoteException {
+		return (AdministratableProvider)theProxy;
+	  }
+	
+	/**
+	 * This method spawns a separate thread to destroy this provider after 2
+	 * sec, should make a reasonable attempt to let this remote call return
+	 * successfully.
+	 */
+	private class DestroyThread implements Runnable {
+		public void run() {
+			try {
+				// allow for remaining cleanup
+				Thread.sleep(2000);
+			} catch (Throwable t) {
+				t.printStackTrace();
+			} finally {
+				if (standalone) {
+					System.out.println("Destoyed Locker Service");
+					System.exit(0);
+				}
+			}
+		}
     }
 }
