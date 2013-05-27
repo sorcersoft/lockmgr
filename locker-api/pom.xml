@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>net.jini</groupId>
-			<artifactId>jsk-platform</artifactId>
+			<artifactId>jsk-lib</artifactId>
 			<version>${v.river}</version>
 		</dependency>
 		<dependency>

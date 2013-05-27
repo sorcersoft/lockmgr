@@ -24,6 +24,8 @@ import java.rmi.RemoteException;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import net.jini.admin.Administrable;
+import net.jini.core.transaction.Transaction;
 import net.jini.id.Uuid;
 import net.jini.id.UuidFactory;
 import net.jini.id.ReferentUuid;
@@ -31,14 +33,14 @@ import net.jini.id.ReferentUuids;
 
 import net.jini.io.MarshalledInstance;
 
-import net.jini.core.transaction.Transaction;
+import com.sun.jini.admin.DestroyAdmin;
 
 /**
    <p>Proxy doesn't actually embed a stub.  Instead, it knows where to locate
    the back-end lock services from LUS and can then aggregate them together to
    gain resilience.</p>
  */
-class Proxy implements MutualExclusion, Serializable, ReferentUuid {
+class Proxy implements MutualExclusion, AdministratableProvider, Serializable, ReferentUuid {
 
     private Locker theStub;
     private Uuid theUuid;
@@ -153,4 +155,19 @@ class Proxy implements MutualExclusion, Serializable, ReferentUuid {
     public int hashCode() {
         return theUuid.hashCode();
     }
+
+	/* (non-Javadoc)
+	 * @see com.sun.jini.admin.DestroyAdmin#destroy()
+	 */
+	public void destroy() throws RemoteException {
+		((DestroyAdmin)theStub).destroy();
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see net.jini.admin.Administrable#getAdmin()
+	 */
+	public Object getAdmin() throws RemoteException {
+		return ((Administrable)theStub).getAdmin();
+	}
 }

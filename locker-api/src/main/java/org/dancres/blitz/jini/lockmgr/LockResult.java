@@ -48,4 +48,8 @@ public class LockResult {
     public Serializable getBlocker() {
         return theOwnerId;
     }
+    
+    public String toString() {
+    	return "" + theLock + " id: " + theOwnerId;
+    }
 }

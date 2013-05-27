@@ -27,4 +27,8 @@ public class LockImpl implements Lock {
     public Serializable getResource() {
         return theResource;
     }
+    
+    public String toString() {
+    	return "Lock for: " + theResource;
+    }
 }
