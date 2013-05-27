@@ -4,8 +4,8 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.sorcersoft.dancres</groupId>
-		<artifactId>locker</artifactId>
+		<groupId>org.sorcersoft.lockmgr</groupId>
+		<artifactId>lockmgr</artifactId>
 		<version>0.2.sorcer2-SNAPSHOT</version>
 	</parent>
 
@@ -14,8 +14,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.sorcersoft.dancres</groupId>
-			<artifactId>locker-api</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>lockmgr-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

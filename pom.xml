@@ -3,8 +3,8 @@
 		xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.sorcersoft.dancres</groupId>
-	<artifactId>locker</artifactId>
+	<groupId>org.sorcersoft.lockmgr</groupId>
+	<artifactId>lockmgr</artifactId>
 	<version>0.2.sorcer2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Lock Manager</name>
@@ -21,9 +21,9 @@
 	</properties>
 
 	<modules>
-		<module>locker-api</module>
-		<module>locker-service</module>
-		<module>locker-proxy</module>
+		<module>lockmgr-api</module>
+		<module>lockmgr-service</module>
+		<module>lockmgr-proxy</module>
 	</modules>
 
 	<developers>
