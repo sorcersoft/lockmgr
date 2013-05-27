@@ -42,11 +42,15 @@ import org.jgroups.ChannelException;
 
 import org.jgroups.blocks.LockNotGrantedException;
 import org.jgroups.blocks.LockNotReleasedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
    @todo Support for configuring multicast etc
  */
-public class ServerImpl implements Locker {
+public class ServerImpl implements Locker, AdministratableProvider {
+	final private static Logger log = LoggerFactory.getLogger(ServerImpl.class);
+
     public static final String NETWORK_CONFIG_ENTRY_NAME = "networkConfig";
 
 	public static final String IS_STANDALONE = "standalone";
@@ -80,10 +84,10 @@ public class ServerImpl implements Locker {
             ConfigurationFactory.setup(anArgs);
 
         if (System.getSecurityManager() == null) {
-            System.err.println("Setting RMISecurityManager");
+			log.info("Setting RMISecurityManager");
             System.setSecurityManager(new RMISecurityManager());
         } else {
-            System.err.println("Manager already set: " +
+			log.info("Manager already set: {}",
                                System.getSecurityManager());
         }
 
@@ -117,7 +121,7 @@ public class ServerImpl implements Locker {
         Class[] myInterfaces = theStub.getClass().getInterfaces();
 
         for (int i = 0; i < myInterfaces.length; i++) {
-            System.err.println("Stub supports: " + myInterfaces[i].getName());
+			log.info("Stub supports: {}", myInterfaces[i].getName());
         }
         
         Uuid myUuid = UuidFactory.generate();
@@ -133,7 +137,7 @@ public class ServerImpl implements Locker {
         theVotingAdapter = new VotingAdapter(theChannel);
         theChannel.connect(theConfig.getLockGroup());
 
-        System.out.println("Waiting for channel connection");
+		log.info("Waiting for channel connection");
 
         while (!theChannel.isConnected()) {
             try {
@@ -142,16 +146,16 @@ public class ServerImpl implements Locker {
             }
         }
 
-        System.out.println("Connected: " + theChannel + ", " +
-                           theChannel.getAddress());
+		log.info("Connected: {}, {}", theChannel,
+				theChannel.getAddress());
 
         theLockMgr = new DistributedLockManager(theVotingAdapter, myUuid);
 
-        System.out.println("Channel connected");
+		log.info("Channel connected");
         
         theChannel.getState(null, 0);
 
-        System.out.println("Syncd state");
+		log.info("Syncd state");
 
         theJoinManager =
             new JoinManager(theProxy, theConfig.getJiniAttrs(),
@@ -160,7 +164,7 @@ public class ServerImpl implements Locker {
                             null,
                             ConfigurationFactory.getConfig());
 
-        System.out.println("Advertising Proxy");
+		log.info("Advertising Proxy");
     }
 
     /**
@@ -222,17 +226,10 @@ public class ServerImpl implements Locker {
         throws RemoteException {
 
         try {
-            /*
-            System.out.println("Request lock: " + aClass + ", " + anId +
-                               ", " + aLeaseTime + ", " + aClientId);
-            */
-
             LockKey myKey = new LockKey(aClass, anId);
 
             theLockMgr.lock(myKey, aClientId, theConfig.getOpTimeout(),
                             aTxn);
-
-            // System.err.println("Joining txn");
 
             if (aTxn != null) {
                 /*
@@ -252,8 +249,7 @@ public class ServerImpl implements Locker {
                     myTxn.mgr.join(myTxn.id, myParticipant, theCrashCount);
 
                 } catch (Exception anE) {
-                    // System.err.println("Join failed");
-                    anE.printStackTrace(System.err);
+					log.error("Join failed", anE);
                     return LockStatus.FAILED;
                 }
             }
@@ -310,10 +306,10 @@ public class ServerImpl implements Locker {
 				// allow for remaining cleanup
 				Thread.sleep(2000);
 			} catch (Throwable t) {
-				t.printStackTrace();
+				log.info("Interrupted", t);
 			} finally {
 				if (standalone) {
-					System.out.println("Destoyed Locker Service");
+					log.info("Destoyed Locker Service");
 					System.exit(0);
 				}
 			}

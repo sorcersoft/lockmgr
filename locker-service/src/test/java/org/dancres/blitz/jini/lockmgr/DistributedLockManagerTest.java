@@ -17,22 +17,26 @@ package org.dancres.blitz.jini.lockmgr;
 
 import java.io.Serializable;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.jgroups.JChannel;
 import org.jgroups.Channel;
 
 import org.jgroups.blocks.LockNotGrantedException;
 import org.jgroups.blocks.LockNotReleasedException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static org.junit.Assert.assertTrue;
 
 /**
    Modified to test additional features such as leasing
 
    @author Dan Creswell (dan@dancres.org)
  */
-public class DistributedLockManagerTest extends TestCase {
+public class DistributedLockManagerTest {
+	final private static Logger log = LoggerFactory.getLogger(DistributedLockManager.class);
 
     public static final String SERVER_PROTOCOL_STACK = ""
             + "UDP(mcast_addr=228.3.11.76;mcast_port=12345;ip_ttl=1;"
@@ -53,16 +57,6 @@ public class DistributedLockManagerTest extends TestCase {
             + ":pbcast.STATE_TRANSFER(down_thread=false)"
         ;
     
-    
-    public DistributedLockManagerTest(String testName) {
-            super(testName);
-    }
-
-    public static Test suite() {
-            return new TestSuite(DistributedLockManagerTest.class);
-    }
-
-    
     private JChannel channel1;
     private JChannel channel2;
 
@@ -75,6 +69,7 @@ public class DistributedLockManagerTest extends TestCase {
     protected static
             boolean logConfigured;
 
+	@Before
     public void setUp() throws Exception {
         
 
@@ -93,16 +88,16 @@ public class DistributedLockManagerTest extends TestCase {
             }
         }
 
-        System.out.println("Channel1 connected");
+		log.info("Channel1 connected");
 
         // give some time for the channel to become a coordinator
         try {
                 Thread.sleep(5000);
         } catch(Exception ex) {
         }
-                
-        System.out.println("Request state on channel1: " +
-                           channel1.getState(null, 0));
+
+		log.info("Request state on channel1: {}",
+				channel1.getState(null, 0));
         
         lockManager1 = new DistributedLockManager(adapter1, "1");
 
@@ -121,12 +116,13 @@ public class DistributedLockManagerTest extends TestCase {
             }
         }
 
-        System.out.println("Channel2 connected");
+		log.info("Channel2 connected");
 
-        System.out.println("Request state on channel2: " +
-                           channel2.getState(null, 0));
+		log.info("Request state on channel2: {}",
+				channel2.getState(null, 0));
     }
 
+	@After
     public void tearDown() throws Exception {
         channel2.close();
         
@@ -140,12 +136,13 @@ public class DistributedLockManagerTest extends TestCase {
         channel1.close();
     }
 
+	@Test
     public void test() throws Exception {
-        System.out.println("Lock 1");
+		log.info("Lock 1");
         lockManager1.lock("obj1", "owner1", 10000, null);
         
         try {
-            System.out.println("Lock 1.1");
+			log.info("Lock 1.1");
             lockManager1.lock("obj1", "owner2", 10000, null);
             assertTrue("obj1 should not be locked.", false);
         } catch (LockNotGrantedException ex) {
@@ -153,22 +150,22 @@ public class DistributedLockManagerTest extends TestCase {
         }
 
         try {
-            System.out.println("Insert 1.1.1");
-            lockManager1.insert("obj1", 10000, new Integer(25));
+			log.info("Insert 1.1.1");
+            lockManager1.insert("obj1", 10000, 25);
             assertTrue("resource should not be inserted(lock).", false);
         } catch (LockNotGrantedException ex) {
             // okay
         }
 
-        System.out.println("Lock 2");
+		log.info("Lock 2");
         lockManager2.lock("obj2", "owner2", 1000, null);
-        
-        System.out.println("UnLock 1");
+
+		log.info("UnLock 1");
         lockManager1.unlock("obj1", "owner1", null);
 
         try {
-            System.out.println("Insert 1.1.2");
-            lockManager1.insert("obj1", 10000, new Integer(25));
+			log.info("Insert 1.1.2");
+            lockManager1.insert("obj1", 10000, 25);
             // okay
         } catch (LockNotGrantedException ex) {
             assertTrue("resource should be inserted(unlock).", false);
@@ -179,18 +176,18 @@ public class DistributedLockManagerTest extends TestCase {
         if (myResource == null)
             assertTrue("No resource recovered", false);
         else
-            System.out.println("Recovered resource: " + myResource);
+			log.info("Recovered resource: {}", myResource);
 
         try {
-            System.out.println("UnLock 2");
+			log.info("UnLock 2");
             lockManager1.unlock("obj2", "owner1", null);
             assertTrue("obj2 should not be released.", false);
         }
         catch (LockNotReleasedException ex) {
             // everything is ok
         }
-        
-        System.out.println("UnLock 2");
+
+		log.info("UnLock 2");
         lockManager1.unlock("obj2", "owner2", null);
 
         lockManager1.lock("obj3", "owner4", 10000, null);
@@ -210,7 +207,7 @@ public class DistributedLockManagerTest extends TestCase {
             } catch (InterruptedException anIE) {
             }
         }
-        System.out.println("Channel3 connected");
+		log.info("Channel3 connected");
 
         while (! channel3.getState(null, 0));
 
@@ -222,15 +219,11 @@ public class DistributedLockManagerTest extends TestCase {
         }
 
         try {
-            System.out.println("Delete 1.1.1");
+			log.info("Delete 1.1.1");
             lockManager3.delete("obj1", 10000);
             // okay
         } catch (LockNotReleasedException ex) {
             assertTrue("resource should be inserted(unlock).", false);
         }
-    }
-
-    public static void main(String[] args) {
-	junit.textui.TestRunner.run(suite());
     }
 }

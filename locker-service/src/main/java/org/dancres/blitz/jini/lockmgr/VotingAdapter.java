@@ -15,9 +15,6 @@
 
 package org.dancres.blitz.jini.lockmgr;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.jgroups.*;
 
 import org.jgroups.blocks.RequestOptions;
@@ -30,6 +27,8 @@ import org.jgroups.blocks.PullPushAdapter;
 
 import org.jgroups.util.Rsp;
 import org.jgroups.util.RspList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -59,7 +58,8 @@ import java.util.Set;
  * @author Dan Creswell (dan@dancres.org)
  */
 public class VotingAdapter implements MessageListener, MembershipListener {
-    
+	final private static Logger log = LoggerFactory.getLogger(DistributedLockManager.class);
+
     /**
      * This consensus type means that at least one positive vote is required
      * for the voting to succeed.
@@ -85,8 +85,6 @@ public class VotingAdapter implements MessageListener, MembershipListener {
     
 
     private RpcDispatcher rpcDispatcher;
-
-    protected Log log=LogFactory.getLog(getClass());
 
     private HashSet suspectedNodes = new HashSet();
     private boolean blocked = false;
@@ -253,8 +251,7 @@ public class VotingAdapter implements MessageListener, MembershipListener {
         // we received exception/error, something went wrong
         // on one of the nodes... and we do not handle such faults
         if (object instanceof Throwable) {
-            System.err.println("Got exception");
-            ((Throwable) object).printStackTrace(System.err);
+			log.info("Got exception", (Throwable) object);
             throw new ChannelException("Node " + response.getSender() +
 				       " is faulty.");
         }

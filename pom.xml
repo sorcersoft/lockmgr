@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.sorcersoft.dancres</groupId>
 	<artifactId>locker</artifactId>
-	<version>0.2</version>
+	<version>0.2.sorcer2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Lock Manager</name>
 	<description>Jini Distributed Lock Manager</description>
@@ -14,6 +14,8 @@
 	<properties>
 		<v.river>2.2.1</v.river>
 		<v.jgroups>2.12.1.Final</v.jgroups>
+		<v.slf4j>1.7.5</v.slf4j>
+		<v.junit>4.11</v.junit>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

@@ -19,11 +19,17 @@ import java.rmi.RMISecurityManager;
 
 import net.jini.core.transaction.*;
 import net.jini.core.transaction.server.TransactionManager;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
   @todo Fix this to use transactions
  */
 public class MutexTest {
+	final private static Logger log = LoggerFactory.getLogger(MutexTest.class);
+
     public void exec() throws Exception {
         /*
           Find an instance of the MutualExclusion service
@@ -54,9 +60,9 @@ public class MutexTest {
           automatically free the lock.
          */
 
-        System.err.println("Try lock");
+		log.info("Try lock");
 
-        LockResult myLock = myLocker.getLock("rhubarb", new Integer(55), myTxn,
+        LockResult myLock = myLocker.getLock("rhubarb", 55, myTxn,
                                              "MutexTest");
 
         if (!myLock.didSucceed()) {
@@ -64,7 +70,7 @@ public class MutexTest {
             throw new RuntimeException("Didn't get lock");
         }
 
-        System.out.println("Got lock: " + myLock.getLock().getResource());
+		log.info("Got lock: {}", myLock.getLock().getResource());
 
         /*
           Let the lock go
@@ -123,11 +129,11 @@ public class MutexTest {
             throw new RuntimeException("Didn't get lock");
         }
 
-        System.out.println("Waiting for conflict");
+		log.info("Waiting for conflict");
 
         Thread.sleep(30000);
 
-        System.out.println("Releasing");
+		log.info("Releasing");
 
         myTxn.commit();
     }
@@ -139,8 +145,7 @@ public class MutexTest {
 
             new MutexTest().exec();
         } catch (Exception anE) {
-            System.err.println("Whoops");
-            anE.printStackTrace(System.err);
+			log.error("Whoops", anE);
         }
     }
 }

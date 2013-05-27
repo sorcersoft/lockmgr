@@ -29,6 +29,8 @@ import net.jini.lookup.entry.Name;
 import net.jini.discovery.LookupDiscovery;
 import net.jini.discovery.DiscoveryListener;
 import net.jini.discovery.DiscoveryEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
    A class which supports a simple JINI multicast lookup.  It doesn't register
@@ -44,6 +46,8 @@ import net.jini.discovery.DiscoveryEvent;
    @version 1.00, 7/9/2003
  */
 class Lookup implements DiscoveryListener {
+	final private static Logger log = LoggerFactory.getLogger(Lookup.class);
+
     private ServiceTemplate theTemplate;
     private LookupDiscovery theDiscoverer;
 
@@ -87,8 +91,7 @@ class Lookup implements DiscoveryListener {
                         new LookupDiscovery(LookupDiscovery.ALL_GROUPS);
                     theDiscoverer.addDiscoveryListener(this);
                 } catch (IOException anIOE) {
-                    System.err.println("Failed to init lookup");
-                    anIOE.printStackTrace(System.err);
+					log.error("Failed to init lookup", anIOE);
                 }
             }
         }
@@ -168,8 +171,7 @@ class Lookup implements DiscoveryListener {
                     break;
                 }
             } catch (RemoteException anRE) {
-                System.err.println("ServiceRegistrar barfed");
-                anRE.printStackTrace(System.err);
+				log.error("ServiceRegistrar barfed", anRE);
             }
         }
     }

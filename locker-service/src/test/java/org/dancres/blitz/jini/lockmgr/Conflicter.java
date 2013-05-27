@@ -19,11 +19,17 @@ import java.rmi.RMISecurityManager;
 
 import net.jini.core.transaction.*;
 import net.jini.core.transaction.server.TransactionManager;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
    @todo Fix this to use a transaction
  */
 public class Conflicter {
+	final private static Logger log = LoggerFactory.getLogger(Conflicter.class);
+
     public void exec() throws Exception {
         Lookup myFinder = new Lookup(MutualExclusion.class);
 
@@ -36,13 +42,13 @@ public class Conflicter {
         Transaction.Created myTxnC = TransactionFactory.create(myMgr, 100000);
         Transaction myTxn = myTxnC.transaction;
 
-        LockResult myLock = myLocker.getLock("rhubarb", new Integer(55), myTxn,
+        LockResult myLock = myLocker.getLock("rhubarb", 55, myTxn,
                                              "conflicter");
 
         if (myLock.didSucceed())
-            System.err.println("Argh, shouldn't get lock");
+            log.info("Argh, shouldn't get lock");
         else
-            System.out.println("Couldn't get lock");
+            log.info("Couldn't get lock");
 
         myTxn.abort();
     }

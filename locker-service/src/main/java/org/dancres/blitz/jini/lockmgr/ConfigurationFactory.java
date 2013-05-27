@@ -18,8 +18,12 @@ package org.dancres.blitz.jini.lockmgr;
 import net.jini.config.Configuration;
 import net.jini.config.ConfigurationProvider;
 import net.jini.config.ConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConfigurationFactory {
+	final private static Logger log = LoggerFactory.getLogger(ConfigurationFactory.class);
+
     private static String[] theArgs = {"config/lockmgr.config"};
     private static Configuration theConfig;
 
@@ -29,7 +33,7 @@ public class ConfigurationFactory {
        Configure the arguments for finding a Configuration
      */
     public static void setup(String[] anArgs) {
-        System.err.println("ConfigurationFactory will load config from: " +
+		log.info("ConfigurationFactory will load config from: {}",
                            anArgs[0]);
         theArgs = anArgs;
     }
@@ -39,7 +43,7 @@ public class ConfigurationFactory {
        "config/lockmgr.config"
      */
     private static synchronized void load() throws ConfigurationException {
-        System.err.println("Loading config from: " + theArgs[0]);
+        log.info("Loading config from: " + theArgs[0]);
 
         theConfig =
             ConfigurationProvider.getInstance(theArgs,

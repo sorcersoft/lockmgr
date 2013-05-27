@@ -27,7 +27,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Collections;
 
@@ -39,9 +38,6 @@ import net.jini.core.transaction.server.TransactionConstants;
 
 import net.jini.io.MarshalledInstance;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.jgroups.MessageListener;
 import org.jgroups.ChannelException;
 
@@ -49,6 +45,8 @@ import org.jgroups.blocks.TwoPhaseVotingListener;
 import org.jgroups.blocks.VoteException;
 import org.jgroups.blocks.LockNotGrantedException;
 import org.jgroups.blocks.LockNotReleasedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Distributed lock manager is responsible for maintaining the lock information
@@ -64,6 +62,8 @@ import org.jgroups.blocks.LockNotReleasedException;
 public class DistributedLockManager implements TwoPhaseVotingListener,
                                                LockManager,
                                                MessageListener {
+
+	final private static Logger log = LoggerFactory.getLogger(DistributedLockManager.class);
 
     /**
      * This parameter means that lock acquisition expires after 5 seconds.
@@ -97,9 +97,6 @@ public class DistributedLockManager implements TwoPhaseVotingListener,
 	private TwoPhaseVotingAdapter votingAdapter;
 
 	private Object id;
-
-    protected Log log=LogFactory.getLog(getClass());
-
 
     /**
      * Create instance of this class.
@@ -360,8 +357,7 @@ public class DistributedLockManager implements TwoPhaseVotingListener,
             acquired = votingAdapter.vote(myDecree, timeout);
 
         } catch (Exception anE) {
-            System.err.println("Server failed");
-            anE.printStackTrace(System.err);
+			log.error("Server failed", anE);
             throw new ChannelException("Failed", anE);
         }
 
@@ -420,8 +416,7 @@ public class DistributedLockManager implements TwoPhaseVotingListener,
                                                          owner, id, aTxn),
                                    VOTE_TIMEOUT);
         } catch (Exception anE) {
-            System.err.println("Server failed");
-            anE.printStackTrace(System.err);
+			log.error("Server failed", anE);
             throw new ChannelException("Failed", anE);
         }
         
@@ -746,7 +741,7 @@ public class DistributedLockManager implements TwoPhaseVotingListener,
      ***********************************************************************/
 
     public byte[] getState() {
-        System.out.println("GetState:" + id);
+		log.info("GetState:{}", id);
 
         try {
             ByteArrayOutputStream myStream = new ByteArrayOutputStream();
@@ -762,8 +757,7 @@ public class DistributedLockManager implements TwoPhaseVotingListener,
 
             return myStream.toByteArray();
         } catch (Exception anE) {
-            System.err.println("Failed to perform getState");
-            anE.printStackTrace(System.err);
+			log.error("Failed to perform getState", anE);
             return null;
         }
     }
@@ -781,10 +775,10 @@ public class DistributedLockManager implements TwoPhaseVotingListener,
      * Set the channel state. We do nothing here.
      */
     public void setState(byte[] state) {
-        System.out.println("SetState:" + id);
+        log.info("SetState:{}", id);
 
         if (state == null) {
-            System.out.println("Not found state");
+            log.info("Not found state");
             return;
         }
 
@@ -802,27 +796,20 @@ public class DistributedLockManager implements TwoPhaseVotingListener,
 
             myOIS.close();
 
-            System.out.println("Got " + preparedLocks.size() +
-                               " prepared locks");
+            log.info("Got {} prepared locks", preparedLocks.size());
 
-            System.out.println("Got " + preparedReleases.size() +
-                               " prepared releases");
+			log.info("Got {} prepared releases", preparedReleases.size());
 
-            System.out.println("Got " + heldLocks.size() +
-                               " held locks");
+			log.info("Got {} held locks", heldLocks.size());
 
-            System.out.println("Got " + preparedNews.size() +
-                               " prepared news");
+			log.info("Got {} prepared news", preparedNews.size());
 
-            System.out.println("Got " + preparedDeletes.size() +
-                               " prepared deletes");
+			log.info("Got {} prepared deletes", preparedDeletes.size());
 
-            System.out.println("Got " + heldResources.size() +
-                               " held resources");
+			log.info("Got {} held resources", heldResources.size());
 
         } catch (Exception anE) {
-            System.err.println("Failed to perform setState");
-            anE.printStackTrace(System.err);
+			log.error("Failed to perform setState", anE);
         }
     }
 
@@ -1030,8 +1017,7 @@ public class DistributedLockManager implements TwoPhaseVotingListener,
                         }
                     }
                 } catch (Exception anE) {
-                    System.err.println("Equals failed!");
-                    anE.printStackTrace(System.err);
+					log.error("Equals failed!", anE);
                 }
             }
 
@@ -1041,7 +1027,7 @@ public class DistributedLockManager implements TwoPhaseVotingListener,
         public boolean isValid() {
             try {
                 if (theTxn == null) {
-                    System.err.println("isValid:forceTrue");
+					log.warn("isValid:forceTrue");
                     return true;
                 }
 
