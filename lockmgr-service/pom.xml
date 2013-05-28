@@ -16,12 +16,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>locker-api</artifactId>
+			<artifactId>lockmgr-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>locker-proxy</artifactId>
+			<artifactId>lockmgr-proxy</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

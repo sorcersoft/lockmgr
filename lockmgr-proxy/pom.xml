@@ -9,7 +9,7 @@
 		<version>0.2.sorcer2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>locker-proxy</artifactId>
+	<artifactId>lockmgr-proxy</artifactId>
 	<name>Lock Manager - Proxy</name>
 
 	<dependencies>
