@@ -10,7 +10,7 @@
 		<version>0.2.sorcer2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>locker-service</artifactId>
+	<artifactId>lockmgr-service</artifactId>
 	<name>Lock Manager - Service</name>
 
 	<dependencies>
