@@ -1,11 +1,9 @@
-<project
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-		xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.sorcersoft.lockmgr</groupId>
 	<artifactId>lockmgr</artifactId>
-	<version>0.2.sorcer2-SNAPSHOT</version>
+	<version>0.2.sorcer2</version>
 	<packaging>pom</packaging>
 	<name>Lock Manager</name>
 	<description>Jini Distributed Lock Manager</description>
@@ -53,7 +51,8 @@
 		<developerConnection>scm:git:git@github.com:sorcersoft/locker.git</developerConnection>
 		<connection>scm:git:git://github.com/sorcersoft/locker.git</connection>
 		<url>https://github.com/sorcersoft/locker</url>
-	</scm>
+	  <tag>0.2.sorcer2</tag>
+  </scm>
 
 	<licenses>
 		<license>
