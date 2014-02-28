@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.sorcersoft.lockmgr</groupId>
 	<artifactId>lockmgr</artifactId>
-	<version>0.2.sorcer3-SNAPSHOT</version>
+	<version>0.2-3</version>
 	<packaging>pom</packaging>
 	<name>Lock Manager</name>
 	<description>Jini Distributed Lock Manager</description>
 	<url>http://www.dancres.org/blitz/blitz_bits.html</url>
 
 	<properties>
-		<v.river>2.2.1</v.river>
+		<v.river>2.2.2</v.river>
 		<v.jgroups>2.12.1.Final</v.jgroups>
 		<v.slf4j>1.7.5</v.slf4j>
 		<v.junit>4.11</v.junit>
@@ -51,7 +51,7 @@
 		<developerConnection>scm:git:git@github.com:sorcersoft/locker.git</developerConnection>
 		<connection>scm:git:git://github.com/sorcersoft/locker.git</connection>
 		<url>https://github.com/sorcersoft/locker</url>
-	  <tag>HEAD</tag>
+	  <tag>0.2-3</tag>
   </scm>
 
 	<licenses>
